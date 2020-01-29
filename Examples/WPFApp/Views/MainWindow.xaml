@@ -1,0 +1,39 @@
+﻿<metro:MetroWindow 
+    x:Class="WPFApp.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:nav="clr-namespace:Libs.Prism.Navigation.Helpers;assembly=Libs.Prism.Navigation"
+    xmlns:notifications="clr-namespace:Notifications.Wpf.Core.Controls;assembly=Notifications.Wpf.Core"
+    xmlns:vms="clr-namespace:WPFApp.ViewModels"
+    xmlns:constants="clr-namespace:WPFApp.Extras.Constants"
+    x:Name="This"
+    d:DataContext="{d:DesignInstance vms:MainWindowViewModel}"
+    mc:Ignorable="d"
+    Title="MAGIC REAL TIME LIFE COUNTER"
+    Height="450"
+    Width="800">
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="ContentRendered">
+            <behaviors:InvokeCommandAction 
+                Command="{Binding Path=ContentRendered}"
+                CommandParameter="{Binding ElementName=This}"></behaviors:InvokeCommandAction>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+    <metro:MetroWindow.LeftWindowCommands>
+        <metro:WindowCommands>
+            <Button Command="{Binding Path=Logout}" CommandParameter="{Binding ElementName=This}">
+                <icons:PackIconMaterial Kind="Logout"></icons:PackIconMaterial>
+            </Button>
+        </metro:WindowCommands>
+    </metro:MetroWindow.LeftWindowCommands>
+    <Grid>
+        <Frame nav:FrameHelpers.NavigationArea="{x:Static constants:NavigationAreas.MAIN_AREA}" 
+               Grid.Row="1"></Frame>
+        <notifications:NotificationArea Name="MainArea"></notifications:NotificationArea>
+    </Grid>
+</metro:MetroWindow>
