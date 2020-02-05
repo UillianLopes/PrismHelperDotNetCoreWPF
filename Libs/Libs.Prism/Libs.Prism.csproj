@@ -3,6 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <Version>0.1.3</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/UillianLopes/PrismHelperDotNetCoreWPF</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>WPF, .netcore, prism</PackageTags>
+    <Description>This library tries to help programmers to implement the dependency injection of .netcore in WPF and as a bonus it offers some classes of help in MVVM such as DelegateCommand and also ValidableModel.</Description>
+    <Authors>Uillian Lopes</Authors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +18,14 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

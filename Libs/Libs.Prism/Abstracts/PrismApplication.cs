@@ -8,6 +8,7 @@ namespace Libs.Prism.Abstracts
     public abstract class PrismApplication : Application
     {
 
+
         public T Dispatch<T>(Func<T> func) => Current.Dispatcher.Invoke(func);
         public void Dispatch(Action action) => Current.Dispatcher.Invoke(action);
 

@@ -32,8 +32,20 @@
         </metro:WindowCommands>
     </metro:MetroWindow.LeftWindowCommands>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
         <Frame nav:FrameHelpers.NavigationArea="{x:Static constants:NavigationAreas.MAIN_AREA}" 
-               Grid.Row="1"></Frame>
-        <notifications:NotificationArea Name="MainArea"></notifications:NotificationArea>
+               ></Frame>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button 
+                nav:ButtonHelpers.AreaName="{x:Static constants:NavigationAreas.MAIN_AREA}" 
+                nav:ButtonHelpers.Route="home">TESTE !</Button>
+            <Button 
+                nav:ButtonHelpers.AreaName="{x:Static constants:NavigationAreas.MAIN_AREA}" 
+                nav:ButtonHelpers.Route="login">TESTE 22</Button>
+        </StackPanel>
     </Grid>
 </metro:MetroWindow>

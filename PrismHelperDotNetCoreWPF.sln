@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libs.Prism", "Libs\Libs.Pri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libs.Prism.Navigation", "Libs\Libs.Prism.Navigation\Libs.Prism.Navigation.csproj", "{FBD3746D-29FE-4065-A6BC-400E9EA8633D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFApp.Infra", "Examples\WPFApp.Infra\WPFApp.Infra.csproj", "{AAF7FE59-8CC6-4926-8D34-81D46F8016CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{FBD3746D-29FE-4065-A6BC-400E9EA8633D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBD3746D-29FE-4065-A6BC-400E9EA8633D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBD3746D-29FE-4065-A6BC-400E9EA8633D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAF7FE59-8CC6-4926-8D34-81D46F8016CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAF7FE59-8CC6-4926-8D34-81D46F8016CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAF7FE59-8CC6-4926-8D34-81D46F8016CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAF7FE59-8CC6-4926-8D34-81D46F8016CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{5856AA58-D5CE-4AC9-AC6A-2B3C390C610D} = {580F3AF8-E979-4FD3-A6E5-5AB42734E587}
 		{1A17422C-DE96-4447-811B-AA430B84296B} = {D8616CBF-FA8C-405B-B7CB-1AF0919B1F89}
 		{FBD3746D-29FE-4065-A6BC-400E9EA8633D} = {D8616CBF-FA8C-405B-B7CB-1AF0919B1F89}
+		{AAF7FE59-8CC6-4926-8D34-81D46F8016CC} = {580F3AF8-E979-4FD3-A6E5-5AB42734E587}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB376DAA-FCBB-41B7-93BF-57D2D36EB125}
