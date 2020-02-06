@@ -30,7 +30,7 @@ namespace WPFApp.ViewModels.Tasks.Pages
 			if (resolved["TaskList"] is List<TaskListItemModel> tasks)
 			{
 				Tasks.Clear();
-				foreach(var task in Tasks)
+				foreach(var task in tasks)
 					Tasks.Add(task);
 
 			}

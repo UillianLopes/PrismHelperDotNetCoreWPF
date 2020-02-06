@@ -39,7 +39,7 @@ namespace Libs.Prism.Abstracts
         }
 
         public bool IsValid => ValidatorHelpers.Validate(GetType(), this);
-        
+
         public string Error => ValidatorHelpers.GetError(GetType(), this);
 
         private object GetValue(string propertyName)

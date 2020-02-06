@@ -40,13 +40,7 @@
             </Button>
         </metro:WindowCommands>
     </metro:MetroWindow.LeftWindowCommands>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="auto" ></RowDefinition>
-        </Grid.RowDefinitions>
-        
+    <Grid Margin="16">
         <Frame nav:FrameHelpers.NavigationArea="{x:Static consts:NavigationAreas.MAIN_AREA}"></Frame>
-       
     </Grid>
 </metro:MetroWindow>

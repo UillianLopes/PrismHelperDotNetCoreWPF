@@ -27,7 +27,7 @@ namespace Libs.Prism.Abstracts
                 serviceCollection
                     .AddSingleton(configuration);
             }
-            
+
             ConfigureServices(serviceCollection, configuration);
 
             var provider = serviceCollection
@@ -39,7 +39,7 @@ namespace Libs.Prism.Abstracts
 
             InitializeShell(window);
         }
-        
+
         /// <summary>
         /// Method called to register our services to the dependency injection
         /// </summary>

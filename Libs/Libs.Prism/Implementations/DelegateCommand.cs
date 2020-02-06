@@ -27,7 +27,7 @@ namespace Libs.Prism.Implementations
 
         public void Execute(object parameter) => _action(parameter as T);
     }
-    
+
     public class DelegateCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
