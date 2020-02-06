@@ -8,15 +8,24 @@
     xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="clr-namespace:Libs.Prism.Navigation.Helpers;assembly=Libs.Prism.Navigation"
-    xmlns:notifications="clr-namespace:Notifications.Wpf.Core.Controls;assembly=Notifications.Wpf.Core"
+    xmlns:consts="clr-namespace:WPFApp.Extras.Constants"
     xmlns:vms="clr-namespace:WPFApp.ViewModels"
-    xmlns:constants="clr-namespace:WPFApp.Extras.Constants"
     x:Name="This"
     d:DataContext="{d:DesignInstance vms:MainWindowViewModel}"
     mc:Ignorable="d"
-    Title="MAGIC REAL TIME LIFE COUNTER"
+    Title="WPF NAVIGATION EXAMPLE"
     Height="450"
     Width="800">
+
+    <nav:WindowHelpers.InitialRoute>
+        <MultiBinding StringFormat="{}{0}|{1}">
+            <MultiBinding.Bindings>
+                <Binding Source="{x:Static consts:NavigationAreas.MAIN_AREA}"></Binding>
+                <Binding Source="{x:Static consts:NavigationRoutes.HOME_PAGE}"></Binding>
+            </MultiBinding.Bindings>
+        </MultiBinding>
+    </nav:WindowHelpers.InitialRoute>
+
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="ContentRendered">
             <behaviors:InvokeCommandAction 
@@ -34,18 +43,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto" ></RowDefinition>
         </Grid.RowDefinitions>
-        <Frame nav:FrameHelpers.NavigationArea="{x:Static constants:NavigationAreas.MAIN_AREA}" 
-               ></Frame>
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button 
-                nav:ButtonHelpers.AreaName="{x:Static constants:NavigationAreas.MAIN_AREA}" 
-                nav:ButtonHelpers.Route="home">TESTE !</Button>
-            <Button 
-                nav:ButtonHelpers.AreaName="{x:Static constants:NavigationAreas.MAIN_AREA}" 
-                nav:ButtonHelpers.Route="login">TESTE 22</Button>
-        </StackPanel>
+        
+        <Frame nav:FrameHelpers.NavigationArea="{x:Static consts:NavigationAreas.MAIN_AREA}"></Frame>
+       
     </Grid>
 </metro:MetroWindow>

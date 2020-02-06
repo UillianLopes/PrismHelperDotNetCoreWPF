@@ -3,6 +3,7 @@ using Libs.Prism.Navigation.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Notifications.Wpf.Core;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace WPFApp.Extras.Abstracts
@@ -89,7 +90,16 @@ namespace WPFApp.Extras.Abstracts
 
         protected T Resolve<T>() => _provider.GetRequiredService<T>();
 
-        protected void Navigate(string areaName, string route, object param = null) => Dispatch(() => _service.Navigate(areaName, route, useHistory: false, param));
+        protected Task<T> RunAsync<T>(Func<Task<T>> func) => Task.Run(async () => await func());
+
+        protected Task RunAsync(Func<Task> func) => Task.Run(async () => await func());
+
+        protected Task<T> RunAsync<T>(Func<T> func) => Task.Run(() => func());
+
+        protected Task RunAsync<T>(Action action) => Task.Run(() => action());
+
+        protected void Navigate(string areaName, string route, object param = null) =>
+            Dispatch(() => _service.Navigate(areaName, route, useHistory: false, param));
 
     }
 }

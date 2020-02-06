@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace WPFApp.Extras.Helpers
@@ -16,11 +17,11 @@ namespace WPFApp.Extras.Helpers
                     return;
 
                 if (GetLayoutGap(stackPanel) > 0)
-                    stackPanel.Loaded += StackPanelLoaded;
+                    stackPanel.Initialized += StackPanelInitialized;
 
             }));
 
-        private static void StackPanelLoaded(object sender, RoutedEventArgs e)
+        private static void StackPanelInitialized(object sender, EventArgs e)
         {
             if (!(sender is StackPanel stackPanel))
                 return;
@@ -41,8 +42,8 @@ namespace WPFApp.Extras.Helpers
 
                 double top = margin.Top;
                 double left = margin.Left;
-                double bottom = margin.Bottom + (orirentation == Orientation.Vertical ? gap : 0);
-                double right = margin.Right + (orirentation == Orientation.Horizontal ? gap : 0);
+                double bottom = margin.Bottom <= 0 ? margin.Bottom + (orirentation == Orientation.Vertical ? gap : 0) : margin.Bottom;
+                double right = margin.Right <= 0 ? margin.Right + (orirentation == Orientation.Horizontal ? gap : 0) : margin.Bottom;
 
                 child.Margin = new Thickness(left, top, right, bottom);
             }

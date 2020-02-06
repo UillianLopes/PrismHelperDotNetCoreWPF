@@ -1,14 +1,37 @@
 ﻿<Page x:Class="WPFApp.Views.Tasks.Pages.Register"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:WPFApp.Views.Tasks.Pages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:nav="clr-namespace:Libs.Prism.Navigation.Helpers;assembly=Libs.Prism.Navigation"
+      xmlns:consts="clr-namespace:WPFApp.Extras.Constants"
+      xmlns:helpers="clr-namespace:WPFApp.Extras.Helpers"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Register">
-
     <Grid>
-        <Label>Task Register</Label>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" helpers:StackPanelHelper.LayoutGap="5" Margin="0,0,0,5">
+            <Button nav:ButtonHelpers.AreaName="{x:Static consts:NavigationAreas.MAIN_AREA}"
+                    nav:ButtonHelpers.UseHistory="True"
+                    nav:ButtonHelpers.Route="{x:Static consts:NavigationRoutes.HOME_PAGE}">
+                <StackPanel Orientation="Horizontal"  >
+                    <icons:PackIconMaterial Kind="Home" VerticalAlignment="Center"></icons:PackIconMaterial>
+                    <Label Content="_HOME"></Label>
+                </StackPanel>
+            </Button>
+            <Button nav:ButtonHelpers.AreaName="{x:Static consts:NavigationAreas.MAIN_AREA}"
+                    nav:ButtonHelpers.UseHistory="True"
+                    nav:ButtonHelpers.Route="{x:Static consts:NavigationRoutes.TASK_LIST}">
+                <StackPanel Orientation="Horizontal" >
+                    <icons:PackIconFontAwesome Kind="TasksSolid" VerticalAlignment="Center"></icons:PackIconFontAwesome>
+                    <Label Content="_TASK LIST"></Label>
+                </StackPanel>
+            </Button>
+        </StackPanel>
     </Grid>
 </Page>

@@ -8,11 +8,14 @@ using Notifications.Wpf.Core;
 using System;
 using System.IO;
 using System.Windows;
+using WPFApp.Domain.Contracts;
 using WPFApp.Extras.Constants;
 using WPFApp.Infra.Data;
+using WPFApp.Infra.Repositories;
 using WPFApp.ViewModels;
 using WPFApp.ViewModels.Home;
 using WPFApp.ViewModels.Tasks.Pages;
+using WPFApp.ViewModels.Tasks.Resolvers;
 using WPFApp.Views;
 using WPFApp.Views.Home;
 using WPFApp.Views.Tasks.Pages;
@@ -30,12 +33,16 @@ namespace WPFApp
 
         protected override void ConfigureServices(IServiceCollection collection, IConfiguration configuration)
         {
+
             collection.AddView<MainWindow, MainWindowViewModel>(v => v.WindowStartupLocation = WindowStartupLocation.CenterScreen);
             
+            var connectionString = configuration["ConnectionString"];
+
             collection.AddDbContextPool<WPFAppDataContext>(options => options
-                .UseSqlite(DatabaseNames.EXAMPLE));
+                .UseSqlite(connectionString));
 
             collection.AddTransient<NotificationManager>();
+            collection.AddScoped<IGenericRepository, GenericRepository>();
 
             collection.AddNavigation(bd => bd
                 // Home
@@ -43,17 +50,28 @@ namespace WPFApp
                 // Task
                 .AddRoute(rb => rb.Page<Register, RegisterViewModel>(NavigationRoutes.TASK_REGISTER))
                 .AddRoute(rb => rb.Page<Detail, DetailViewModel>(NavigationRoutes.TASK_DETAIL))
-                .AddRoute(rb => rb.Page<List, DetailViewModel>(NavigationRoutes.TASK_LIST)));    
+                .AddRoute(rb => rb.Page<List, ListViewModel>(NavigationRoutes.TASK_LIST)
+                    .AddResolver<TaskListResolver>()));;    
         }
 
         protected override Window CreateWindow(IServiceProvider provider) 
         {
             provider.UseNavigation();
+
+            UpdateDatabase(provider);
+
             return provider.GetRequiredService<MainWindow>();
         } 
 
         protected override void InitializeShell(Window window) => base.InitializeShell(window);
 
+        private void UpdateDatabase(IServiceProvider provider)
+        {
+            var context = provider.GetRequiredService<WPFAppDataContext>();
+
+            if (context.Database.EnsureCreated())
+                context.Database.Migrate();
+        }
     }
 
     /// <summary>
@@ -64,11 +82,10 @@ namespace WPFApp
         public WPFAppDataContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<WPFAppDataContext>();
-            
-            optionsBuilder.UseSqlite(DatabaseNames.EXAMPLE);
-
+            optionsBuilder.UseSqlite("Data Source=migrationsdb.db");
             return new WPFAppDataContext(optionsBuilder.Options); ;
         }
     }
+
 
 }

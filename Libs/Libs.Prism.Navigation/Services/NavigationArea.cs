@@ -77,13 +77,13 @@ namespace Libs.Prism.Navigation.Services
                 await qn.OnQueried(dicParam);
 
             if (page.DataContext is IResolvableNavigation rn)
-                await rn.OnResolved(resolvedData);
+                rn.OnResolved(resolvedData);
 
             if (page is IQueryableNavigation pqn)
                 await pqn.OnQueried(dicParam);
 
             if (page is IResolvableNavigation prn)
-                await prn.OnResolved(resolvedData);
+                prn.OnResolved(resolvedData);
 
             _history.Add(route, page);
             _outlet.Content = page;
