@@ -5,6 +5,7 @@ using Notifications.Wpf.Core;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
+using WPFApp.Domain.Contracts;
 
 namespace WPFApp.Extras.Abstracts
 {
@@ -12,6 +13,7 @@ namespace WPFApp.Extras.Abstracts
     {
         private readonly IServiceProvider _provider;
         private readonly INavigationService _service;
+        private readonly IUnityOfWork _unityOfWork;
 
         private bool _buzy;
         public bool Buzy
@@ -31,6 +33,7 @@ namespace WPFApp.Extras.Abstracts
             _provider = provider;
             _service = Resolve<INavigationService>();
             _manager = Resolve<NotificationManager>();
+            _unityOfWork = Resolve<IUnityOfWork>();
         }
 
 
@@ -96,10 +99,18 @@ namespace WPFApp.Extras.Abstracts
 
         protected Task<T> RunAsync<T>(Func<T> func) => Task.Run(() => func());
 
-        protected Task RunAsync<T>(Action action) => Task.Run(() => action());
+        protected Task RunAsync(Action action) => Task.Run(() => action());
+
+        protected void PopAndNavigate(string areaName, string route, object param = null)
+        {
+            Dispatch(() => _service.Pop(areaName));
+            Navigate(areaName, route, param);
+        }
 
         protected void Navigate(string areaName, string route, object param = null) =>
             Dispatch(() => _service.Navigate(areaName, route, useHistory: false, param));
 
+        public Task CommitAsync() => _unityOfWork
+            .CommitAsync();
     }
 }

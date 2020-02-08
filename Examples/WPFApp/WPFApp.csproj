@@ -40,7 +40,6 @@
   <ItemGroup>
     <Folder Include="Domain\Entities\" />
     <Folder Include="Domain\Abstracts\" />
-    <Folder Include="Extras\Guards\" />
   </ItemGroup>
 
 </Project>

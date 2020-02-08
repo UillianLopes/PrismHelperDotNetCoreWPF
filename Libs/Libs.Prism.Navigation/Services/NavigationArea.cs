@@ -27,18 +27,26 @@ namespace Libs.Prism.Navigation.Services
 
         private NavigationRoute this[string route] => _routes[route];
 
-        public void Previous() => _outlet.Content = _history.Previous();
+        public void Previous(bool pop) 
+        {
+            if (_history.Previous(pop) is Page page)
+                _outlet.Content = page;
+        }
 
-        public void Next() => _outlet.Content = _history.Next();
+        public void Next(bool pop)
+        {
+            if (_history.Next(pop) is Page page)
+                _outlet.Content = page;
+        }
 
         public async Task Navigate(string route, bool useHistory, object param = null)
         {
-            if (useHistory && _history[route] is NavigationHistoryItem item)
-            {
-                _outlet.Content = item.Page;
-                _history.Add(route, item.Page);
-                return;
-            }
+            //if (useHistory && _history[route] is NavigationHistoryItem item)
+            //{
+            //    _outlet.Content = item.Page;
+            //    _history.Add(route, item.Page);
+            //    return;
+            //}
 
             if (!(this[route] is NavigationRoute nr))
                 throw new InvalidOperationException($"Route not found ${route}");
@@ -77,19 +85,24 @@ namespace Libs.Prism.Navigation.Services
                 await qn.OnQueried(dicParam);
 
             if (page.DataContext is IResolvableNavigation rn)
-                rn.OnResolved(resolvedData);
+                if (!rn.OnResolved(resolvedData))
+                    return;
 
             if (page is IQueryableNavigation pqn)
                 await pqn.OnQueried(dicParam);
 
             if (page is IResolvableNavigation prn)
-                prn.OnResolved(resolvedData);
-
+                if (!prn.OnResolved(resolvedData))
+                    return;
+            
             _history.Add(route, page);
+
             _outlet.Content = page;
         }
 
         public void SetFrame(Frame frame) => _outlet = frame;
+
+        public void Pop() => _history.Pop();
     }
 
 

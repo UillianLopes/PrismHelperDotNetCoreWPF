@@ -9,6 +9,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="clr-namespace:Libs.Prism.Navigation.Helpers;assembly=Libs.Prism.Navigation"
     xmlns:consts="clr-namespace:WPFApp.Extras.Constants"
+    xmlns:itv="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:helpers="clr-namespace:WPFApp.Extras.Helpers"
+    xmlns:navBhv="clr-namespace:Libs.Prism.Navigation.Behaviors;assembly=Libs.Prism.Navigation"
     xmlns:vms="clr-namespace:WPFApp.ViewModels"
     x:Name="This"
     d:DataContext="{d:DesignInstance vms:MainWindowViewModel}"
@@ -16,7 +19,6 @@
     Title="WPF NAVIGATION EXAMPLE"
     Height="450"
     Width="800">
-
     <nav:WindowHelpers.InitialRoute>
         <MultiBinding StringFormat="{}{0}|{1}">
             <MultiBinding.Bindings>
@@ -25,7 +27,6 @@
             </MultiBinding.Bindings>
         </MultiBinding>
     </nav:WindowHelpers.InitialRoute>
-
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="ContentRendered">
             <behaviors:InvokeCommandAction 
@@ -41,6 +42,34 @@
         </metro:WindowCommands>
     </metro:MetroWindow.LeftWindowCommands>
     <Grid Margin="16">
-        <Frame nav:FrameHelpers.NavigationArea="{x:Static consts:NavigationAreas.MAIN_AREA}"></Frame>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" helpers:StackPanelHelper.LayoutGap="8" Margin="0,0,0,8">
+            <Button Style="{StaticResource MahApps.Styles.Button.Circle}" Height="30" Width="30">
+                <itv:Interaction.Triggers>
+                    <itv:EventTrigger EventName="Click">
+                        <navBhv:NavigatePrevious AreaName="{x:Static consts:NavigationAreas.MAIN_AREA}"></navBhv:NavigatePrevious>
+                    </itv:EventTrigger>
+                </itv:Interaction.Triggers>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <icons:PackIconFontAwesome 
+                        Kind="ArrowLeftSolid"></icons:PackIconFontAwesome>
+                </StackPanel>
+            </Button>
+            <Button Style="{StaticResource MahApps.Styles.Button.Circle}" Height="30" Width="30">
+                <itv:Interaction.Triggers>
+                    <itv:EventTrigger EventName="Click">
+                        <navBhv:NavigateNext AreaName="{x:Static consts:NavigationAreas.MAIN_AREA}"></navBhv:NavigateNext>
+                    </itv:EventTrigger>
+                </itv:Interaction.Triggers>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <icons:PackIconFontAwesome
+                        Kind="ArrowRightSolid"></icons:PackIconFontAwesome>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <Frame Grid.Row="1" nav:FrameHelpers.NavigationArea="{x:Static consts:NavigationAreas.MAIN_AREA}"></Frame>
     </Grid>
 </metro:MetroWindow>

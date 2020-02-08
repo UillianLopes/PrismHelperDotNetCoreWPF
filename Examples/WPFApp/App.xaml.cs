@@ -49,9 +49,11 @@ namespace WPFApp
                 .AddRoute(rb => rb.Page<HomePage, HomeViewModel>(NavigationRoutes.HOME_PAGE))
                 // Task
                 .AddRoute(rb => rb.Page<Register, RegisterViewModel>(NavigationRoutes.TASK_REGISTER))
-                .AddRoute(rb => rb.Page<Detail, DetailViewModel>(NavigationRoutes.TASK_DETAIL))
+                .AddRoute(rb => rb.Page<Detail, DetailViewModel>(NavigationRoutes.TASK_DETAIL)
+                    .AddResolver<TaskDetailResolver>())
                 .AddRoute(rb => rb.Page<List, ListViewModel>(NavigationRoutes.TASK_LIST)
-                    .AddResolver<TaskListResolver>()));;    
+                    .AddResolver<TaskListResolver>()));;
+            collection.AddScoped<IUnityOfWork, UnityOfWork>();
         }
 
         protected override Window CreateWindow(IServiceProvider provider) 

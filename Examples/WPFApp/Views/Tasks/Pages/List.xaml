@@ -8,9 +8,14 @@
       xmlns:models="clr-namespace:WPFApp.Domain.Models;assembly=WPFApp.Domain"
       xmlns:consts="clr-namespace:WPFApp.Extras.Constants"
       xmlns:helpers="clr-namespace:WPFApp.Extras.Helpers"
+      xmlns:itv="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:vm="clr-namespace:WPFApp.ViewModels.Tasks.Pages"
+      xmlns:enums="clr-namespace:WPFApp.Domain.Enums;assembly=WPFApp.Domain"
+      xmlns:navBhv="clr-namespace:Libs.Prism.Navigation.Behaviors;assembly=Libs.Prism.Navigation"
       mc:Ignorable="d"
       d:DesignHeight="450"
       d:DesignWidth="800"
+      d:DataContext="{d:DesignInstance vm:ListViewModel}"
       Title="List">
 
     <Grid>
@@ -18,7 +23,7 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" helpers:StackPanelHelper.LayoutGap="5" Margin="0,0,0,5">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" helpers:StackPanelHelper.LayoutGap="8" Margin="0,0,0,8">
             <Button nav:ButtonHelpers.AreaName="{x:Static consts:NavigationAreas.MAIN_AREA}"
                     nav:ButtonHelpers.UseHistory="True"
                     nav:ButtonHelpers.Route="{x:Static consts:NavigationRoutes.HOME_PAGE}">
@@ -36,13 +41,34 @@
                 </StackPanel>
             </Button>
         </StackPanel>
-        <DataGrid Grid.Row="1">
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding Path=Tasks}" 
+                  CanUserAddRows="False"
+                  AutoGenerateColumns="False"
+                  x:Name="GrdTasks">
+            <itv:Interaction.Triggers>
+                <itv:EventTrigger EventName="MouseDoubleClick">
+                    <navBhv:Navigate 
+                        AreaName="{x:Static consts:NavigationAreas.MAIN_AREA}"
+                        Route="{x:Static consts:NavigationRoutes.TASK_DETAIL}"
+                        UseHistory="False"
+                        QueryParams="{Binding ElementName=GrdTasks, Path=SelectedItem}"></navBhv:Navigate>
+                </itv:EventTrigger>
+            </itv:Interaction.Triggers>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name"></DataGridTextColumn>
-                <DataGridTextColumn Header="Description" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Path=Name}"></DataGridTextColumn>
+                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Path=Deadline, StringFormat='yyyy/MM/dd HH:mm:ss'}"></DataGridTextColumn>
+                <DataGridTextColumn IsReadOnly="True" Header="Description" Binding="{Binding Path=Description}" Width="*"></DataGridTextColumn>
                 <DataGridTemplateColumn Header="State" Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="{x:Type models:TaskListItemModel}"></DataTemplate>
+                        <DataTemplate DataType="{x:Type models:TaskModel}">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <icons:PackIconMaterial Kind="NewBox" Visibility="{Binding Path=CurrentState, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static enums:TaskState.Created}}"></icons:PackIconMaterial>
+                                <icons:PackIconFontAwesome Kind="PlaySolid" Visibility="{Binding Path=CurrentState, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static enums:TaskState.Started}}"></icons:PackIconFontAwesome>
+                                <icons:PackIconFontAwesome Kind="PauseSolid" Visibility="{Binding Path=CurrentState, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static enums:TaskState.Paused}}"></icons:PackIconFontAwesome>
+                                <icons:PackIconFontAwesome Kind="CheckSolid" Visibility="{Binding Path=CurrentState, Converter={StaticResource EqualsToVisibilityConverter}, ConverterParameter={x:Static enums:TaskState.Completed}}"></icons:PackIconFontAwesome>
+                            </StackPanel>
+                        </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>

@@ -23,6 +23,13 @@ namespace WPFApp.Domain.Entities
             Deadline = limit;
         }
 
+        public void Alterar(string name, string description, DateTime limit)
+        {
+            Name = name;
+            Description = description;
+            Deadline = limit;
+        }
+
         public void Start(string message) => Logs.Add(TaskLog.Started(this, message));
 
         public void Pause(string message) => Logs.Add(TaskLog.Paused(this, message));

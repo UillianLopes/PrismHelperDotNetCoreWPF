@@ -5,9 +5,11 @@ namespace Libs.Prism.Navigation.Interfaces
 {
     public interface INavigationService
     {
-        void Previous(string areaName);
+        void Previous(string areaName, bool pop = false);
 
-        void Next(string areaName);
+        void Next(string areaName, bool pop = false);
+
+        void Pop(string areaName);
 
         void AddArea(string areaName, Frame frame);
 

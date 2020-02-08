@@ -7,6 +7,7 @@ namespace WPFApp.Domain.Models.Commands
     public class TaskRegisterModel : ValidableModel
     {
         private string _name;
+
         [Required(ErrorMessage = "The task name is required.")]
         [MaxLength(75, ErrorMessage = "Name can't have more than 75 characters.")]
         [MinLength(5, ErrorMessage = "Name can't have less than 5 characters.")]
@@ -33,8 +34,10 @@ namespace WPFApp.Domain.Models.Commands
             }
         }
 
-        private DateTime _deadline;
-        public DateTime Deadline
+        private DateTime? _deadline;
+
+        [Required(ErrorMessage ="Task deadline is required")]
+        public DateTime? Deadline
         {
             get { return _deadline; }
             set 

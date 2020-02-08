@@ -18,7 +18,7 @@
 
                 <metro:Tile nav:ButtonHelpers.AreaName="{x:Static const:NavigationAreas.MAIN_AREA}"
                             nav:ButtonHelpers.Route="{x:Static const:NavigationRoutes.TASK_LIST}"
-                            nav:ButtonHelpers.UseHistory="True"
+                            nav:ButtonHelpers.UseHistory="False"
                             ToolTip="Task list">
 
                     <icons:PackIconFontAwesome 

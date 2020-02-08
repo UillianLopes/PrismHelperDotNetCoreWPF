@@ -5,6 +5,7 @@ using WPFApp.Domain.Contracts;
 using WPFApp.Domain.Entities;
 using WPFApp.Domain.Models.Commands;
 using WPFApp.Extras.Abstracts;
+using WPFApp.Extras.Constants;
 
 namespace WPFApp.ViewModels.Tasks.Pages
 {
@@ -30,10 +31,13 @@ namespace WPFApp.ViewModels.Tasks.Pages
 
         public ICommand Save => new DelegateCommand(async () =>
         {
-            var task = new Task(Model.Name, Model.Description, Model.Deadline);
+            var task = new Task(Model.Name, Model.Description, Model.Deadline.GetValueOrDefault());
 
             await RunAsync(() => _repository.Insert(task));
 
+            await CommitAsync();
+
+            PopAndNavigate(NavigationAreas.MAIN_AREA, NavigationRoutes.TASK_LIST);
         });
     }
 }

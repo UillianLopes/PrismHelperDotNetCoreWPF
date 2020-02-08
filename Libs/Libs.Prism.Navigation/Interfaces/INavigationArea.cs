@@ -5,9 +5,11 @@ namespace Libs.Prism.Interfaces
 {
     internal interface INavigationArea
     {
-        void Previous();
+        void Previous(bool pop = false);
 
-        void Next();
+        void Next(bool pop = false);
+
+        void Pop();
 
         void SetFrame(Frame frame);
 

@@ -45,6 +45,21 @@ namespace Libs.Prism.Navigation.Helpers
                 button.Click += Navigate;
             }));
 
+        public static bool GetPop(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(PopProperty);
+        }
+
+        public static void SetPop(DependencyObject obj, bool value)
+        {
+            obj.SetValue(PopProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for Pop.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PopProperty =
+            DependencyProperty.RegisterAttached("Pop", typeof(bool), typeof(ButtonHelpers), new PropertyMetadata(false));
+
+
         private static void Navigate(object sender, RoutedEventArgs e)
         {
             if (!(sender is Button button))
@@ -58,8 +73,14 @@ namespace Libs.Prism.Navigation.Helpers
             var useHistory = GetUseHistory(button);
 
             if (NavigationContext.Service != null)
-                NavigationContext.Service.Navigate(areaName, route, useHistory, param);
+            {
+                if (GetPop(button))
+                    NavigationContext.Service.Pop(areaName);
 
+                NavigationContext.Service.Navigate(areaName, route, useHistory, param);
+            }
         }
+
+
     }
 }

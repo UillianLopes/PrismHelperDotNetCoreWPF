@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 
@@ -7,63 +6,65 @@ namespace Libs.Prism.Navigation.Options
 {
     public class NavigationHistory
     {
-        private readonly IList<NavigationHistoryItem> _items;
+        private readonly Stack<NavigationHistoryItem> _previousItems;
+        private readonly Stack<NavigationHistoryItem> _nextItems;
 
-        public string CurrentRoute { get; private set; }
+        public NavigationHistoryItem CurrentItem { private set; get; }
 
-        public NavigationHistoryItem this[string route] => 
-            _items.FirstOrDefault(itm => itm.Route == route);
 
-        internal NavigationHistory() => _items = new List<NavigationHistoryItem>();
+        internal NavigationHistory() 
+        {
+            _previousItems = new Stack<NavigationHistoryItem>();
+            _nextItems = new Stack<NavigationHistoryItem>();
+        }
 
         internal void Add(string route, Page page)
         {
-            if (_items.FirstOrDefault(rt => rt.Route == route) is NavigationHistoryItem item)
+            if (CurrentItem != null)
             {
-                _items.Remove(item);
-                _items.Add(item);
-                return;
+                _previousItems.Push(CurrentItem);
+
+                if (_nextItems.Count > 0)
+                    _nextItems.Clear();
             }
+                
 
-            _items.Add(new NavigationHistoryItem(page, route));
-            CurrentRoute = route;
+            CurrentItem = new NavigationHistoryItem(page, route);
         }
 
-        internal Page Previous()
+        internal Page Previous(bool pop = false)
         {
-            if (!(_items.FirstOrDefault(rt => rt.Route == CurrentRoute) is NavigationHistoryItem currentItem))
-                throw new InvalidOperationException("Invalid route");
-
-            var index = _items
-                .IndexOf(currentItem);
-
-            if (index <= 0)
-                return currentItem.Page;
-
-            if (!(_items.ElementAt(--index) is NavigationHistoryItem previousItem))
-                return currentItem.Page;
-
-            CurrentRoute = previousItem.Route;
-
-            return previousItem.Page;
-        }
-
-        internal Page Next()
-        {
-            if (!(this[CurrentRoute] is NavigationHistoryItem currentItem))
+            if (!_previousItems.Any())
                 return null;
 
-            var index = _items.IndexOf(currentItem);
+            if (!pop)
+                _nextItems.Push(CurrentItem);
+            
+            var previousItem = _previousItems.Pop();
 
-            if (index < (_items.Count - 1))
-                return currentItem.Page;
+            CurrentItem = previousItem;
 
-            if (!(_items.ElementAt(++index) is NavigationHistoryItem nextItem))
-                return currentItem.Page;
+            return CurrentItem.Page;
+        }
 
-            CurrentRoute = nextItem.Route;
+        internal Page Next(bool pop = false)
+        {
+            if (!_nextItems.Any())
+                return null;
 
-            return nextItem.Page;
+            if (!pop)
+                _previousItems.Push(CurrentItem);
+
+            var nextItem = _nextItems.Pop();
+
+            CurrentItem = nextItem;
+
+            return CurrentItem.Page;
+        }
+
+        internal void Pop()
+        {
+            CurrentItem = null;
         }
     }
 }

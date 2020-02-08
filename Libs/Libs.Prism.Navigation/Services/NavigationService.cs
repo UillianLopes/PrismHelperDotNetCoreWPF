@@ -1,4 +1,5 @@
-﻿using Libs.Prism.Navigation.Interfaces;
+﻿using Libs.Prism.Interfaces;
+using Libs.Prism.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,28 +10,28 @@ namespace Libs.Prism.Navigation.Services
 {
     public class NavigationService : INavigationService
     {
-        private readonly IDictionary<string, NavigationArea> _areas;
+        private readonly IDictionary<string, INavigationArea> _areas;
         private readonly IServiceProvider _provider;
 
         public NavigationService(IServiceProvider provider)
         {
             _provider = provider;
-            _areas = new Dictionary<string, NavigationArea>();
+            _areas = new Dictionary<string, INavigationArea>();
         }
 
-        private NavigationArea GetArea(string areaName)
+        private INavigationArea GetArea(string areaName)
         {
-            if (!(_areas[areaName] is NavigationArea area))
+            if (!(_areas[areaName] is INavigationArea area))
                 throw new InvalidOperationException($"Area {areaName} not found!");
 
             return area;
         }
 
-        public Task Navigate(string areaName, string route, bool useHistory = true, object param = null) => GetArea(areaName).Navigate(route, useHistory);
+        public Task Navigate(string areaName, string route, bool useHistory = true, object param = null) => GetArea(areaName).Navigate(route, useHistory, param);
 
-        public void Next(string areaName) => GetArea(areaName).Next();
+        public void Next(string areaName, bool pop = false) => GetArea(areaName).Next(pop);
 
-        public void Previous(string areaName) => GetArea(areaName).Previous();
+        public void Previous(string areaName, bool pop = false) => GetArea(areaName).Previous(pop);
 
         public void AddArea(string areaName, Frame frame)
         {
@@ -42,6 +43,14 @@ namespace Libs.Prism.Navigation.Services
             area.SetFrame(frame);
 
             _areas.Add(areaName, area);
+        }
+
+        public void Pop(string areaName)
+        {
+            if (!(GetArea(areaName) is NavigationArea area))
+                throw new InvalidOperationException($"Invalid area name {areaName}!");
+
+            area.Pop();
         }
     }
 }

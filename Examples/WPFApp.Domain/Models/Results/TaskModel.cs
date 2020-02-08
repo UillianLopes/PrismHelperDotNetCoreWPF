@@ -4,7 +4,7 @@ using WPFApp.Domain.Enums;
 
 namespace WPFApp.Domain.Models
 {
-    public class TaskListItemModel : BindableModel
+    public class TaskModel : BindableModel
     {
         public Guid Id { get; set; }
         
@@ -29,7 +29,15 @@ namespace WPFApp.Domain.Models
             set { _currentState = value; RaisePropertyChanged(() => CurrentState); }
         }
 
-        public TaskListItemModel()
+        private DateTime _deadline;
+        public DateTime Deadline
+        {
+            get { return _deadline; }
+            set { _deadline = value; RaisePropertyChanged(() => Deadline); }
+        }
+
+
+        public TaskModel()
         {
         }
     }

@@ -8,13 +8,13 @@ namespace WPFApp.Domain.Contracts
 {
     public interface IGenericRepository
     {
-        Task<List<T>> GetList<T>(IFilter<T> id) where T : Entity;
+        Task<List<T>> GetList<T>(IFilter<T> filter) where T : Entity;
 
-        Task<List<M>> GetList<T, M>(IFilter<T, M> id) where T : Entity where M : class;
+        Task<List<M>> GetList<T, M>(IFilter<T, M> filter) where T : Entity where M : class;
 
-        Task<T> Get<T>(IFilter<T> id) where T : Entity;
+        Task<T> Get<T>(IFilter<T> filter) where T : Entity;
 
-        Task<M> Get<T, M>(IFilter<T, M> id) where T : Entity where M : class;
+        Task<M> Get<T, M>(IFilter<T, M> filter) where T : Entity where M : class;
 
         Task<T> Get<T>(Guid id) where T : Entity;
 

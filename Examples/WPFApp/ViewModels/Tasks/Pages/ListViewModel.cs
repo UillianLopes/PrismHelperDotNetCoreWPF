@@ -11,11 +11,11 @@ namespace WPFApp.ViewModels.Tasks.Pages
 	{
 		public ListViewModel(IServiceProvider provider) : base(provider)
 		{
-			Tasks = new ObservableCollection<TaskListItemModel>();
+			Tasks = new ObservableCollection<TaskModel>();
 		}
 
-		private ObservableCollection<TaskListItemModel> _tasks;
-		public ObservableCollection<TaskListItemModel> Tasks
+		private ObservableCollection<TaskModel> _tasks;
+		public ObservableCollection<TaskModel> Tasks
 		{
 			get { return _tasks; }
 			set 
@@ -25,17 +25,17 @@ namespace WPFApp.ViewModels.Tasks.Pages
 			}
 		}
 
-		public void OnResolved(IDictionary<string, object> resolved)
+		public bool OnResolved(IDictionary<string, object> resolved)
 		{
-			if (resolved["TaskList"] is List<TaskListItemModel> tasks)
+			if (resolved["TaskList"] is List<TaskModel> tasks)
 			{
 				Tasks.Clear();
 				foreach(var task in tasks)
 					Tasks.Add(task);
 
 			}
-			
 
+			return true;
 		}
 	}
 }

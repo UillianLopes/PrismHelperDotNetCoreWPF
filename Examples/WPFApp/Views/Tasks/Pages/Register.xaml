@@ -1,15 +1,28 @@
 ﻿<Page x:Class="WPFApp.Views.Tasks.Pages.Register"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:itv="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:navBhv="clr-namespace:Libs.Prism.Navigation.Behaviors;assembly=Libs.Prism.Navigation"
       xmlns:nav="clr-namespace:Libs.Prism.Navigation.Helpers;assembly=Libs.Prism.Navigation"
+      xmlns:glob="clr-namespace:System.Globalization;assembly=System.Runtime"
+      xmlns:bhv="clr-namespace:WPFApp.Extras.Behaviors"
       xmlns:consts="clr-namespace:WPFApp.Extras.Constants"
       xmlns:helpers="clr-namespace:WPFApp.Extras.Helpers"
+      xmlns:vms="clr-namespace:WPFApp.ViewModels.Tasks.Pages"
+      x:Name="This"     
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+      d:DataContext="{d:DesignInstance vms:RegisterViewModel}"
       Title="Register">
+    <itv:Interaction.Triggers>
+        <itv:EventTrigger EventName="Loaded">
+            <bhv:SetFocusBehavior FocusedElement="{Binding ElementName=TaskNameTextBox}"></bhv:SetFocusBehavior>
+        </itv:EventTrigger>
+    </itv:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -25,13 +38,59 @@
                 </StackPanel>
             </Button>
             <Button nav:ButtonHelpers.AreaName="{x:Static consts:NavigationAreas.MAIN_AREA}"
-                    nav:ButtonHelpers.UseHistory="True"
+                    nav:ButtonHelpers.UseHistory="False"
                     nav:ButtonHelpers.Route="{x:Static consts:NavigationRoutes.TASK_LIST}">
                 <StackPanel Orientation="Horizontal" >
                     <icons:PackIconFontAwesome Kind="TasksSolid" VerticalAlignment="Center"></icons:PackIconFontAwesome>
                     <Label Content="_TASK LIST"></Label>
                 </StackPanel>
             </Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="1" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center">
+            <StackPanel Width="300" 
+                        helpers:StackPanelHelper.LayoutGap="5">
+                <Label Content="TASK INFORMATION" FontStyle="Normal" FontSize="20" FontWeight="DemiBold"></Label>
+                <TextBox 
+                    x:Name="TaskNameTextBox"
+                    metro:TextBoxHelper.Watermark="Task name"
+                    metro:TextBoxHelper.UseFloatingWatermark="True"
+                    Text="{Binding Path=Model.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></TextBox>
+                
+                <RichTextBox 
+                    metro:TextBoxHelper.Watermark="Description"
+                    metro:TextBoxHelper.UseFloatingWatermark="True"
+                    SpellCheck.IsEnabled="True">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text="{Binding Path=Model.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></Run>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+
+                <metro:DateTimePicker 
+                    metro:TextBoxHelper.Watermark="Deadline"
+                    metro:TextBoxHelper.UseFloatingWatermark="True"
+                    SelectedTimeFormat="Short"
+                    Culture="{Binding Source={x:Static glob:CultureInfo.CurrentCulture}}"
+                    SelectedDateTime="{Binding Path=Model.Deadline, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></metro:DateTimePicker>
+
+                <StackPanel helpers:StackPanelHelper.LayoutGap="5" Orientation="Horizontal">
+                    <Button Content="_CANCEL">
+                        <itv:Interaction.Triggers>
+                            <itv:EventTrigger EventName="Click">
+                                <navBhv:NavigatePrevious 
+                                    Pop="True"
+                                    AreaName="{x:Static consts:NavigationAreas.MAIN_AREA}"></navBhv:NavigatePrevious>
+                            </itv:EventTrigger>
+                        </itv:Interaction.Triggers>
+                    </Button>
+                    <Button Content="_SAVE" Command="{Binding Path=Save}"></Button>
+                </StackPanel>
+            </StackPanel>
+
         </StackPanel>
     </Grid>
 </Page>
