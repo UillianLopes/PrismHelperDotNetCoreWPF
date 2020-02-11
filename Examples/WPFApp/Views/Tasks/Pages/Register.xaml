@@ -87,7 +87,7 @@
                             </itv:EventTrigger>
                         </itv:Interaction.Triggers>
                     </Button>
-                    <Button Content="_SAVE" Command="{Binding Path=Save}"></Button>
+                    <Button Content="_SAVE" Command="{Binding Path=Save}" IsEnabled="{Binding Path=Model.IsValid}"></Button>
                 </StackPanel>
             </StackPanel>
 

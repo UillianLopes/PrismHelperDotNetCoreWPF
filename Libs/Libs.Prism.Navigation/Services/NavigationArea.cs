@@ -41,62 +41,61 @@ namespace Libs.Prism.Navigation.Services
 
         public async Task Navigate(string route, bool useHistory, object param = null)
         {
-            //if (useHistory && _history[route] is NavigationHistoryItem item)
-            //{
-            //    _outlet.Content = item.Page;
-            //    _history.Add(route, item.Page);
-            //    return;
-            //}
-
-            if (!(this[route] is NavigationRoute nr))
+            if (!(this[route] is NavigationRoute navigationRoute))
                 throw new InvalidOperationException($"Route not found ${route}");
 
-            var page = _provider
-                .GetService(nr.Page) as Page;
+            Page page = null;
 
-            var dicParam = param?
-                .GetType()
-                .GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
-                .ToDictionary(pr => pr.Name, pr => pr.GetValue(param));
-
-            var snapshot = new NavigationSnapshot(dicParam, route) ;
-            
-            foreach(var guardType in nr.Guards)
+            if (useHistory && _history[route] is NavigationHistoryItem historyItem)
             {
-                if (!(_provider.GetService(guardType) is INavigationGuard guard))
-                    continue;
-
-                if (!await guard.CanActivate(snapshot))
-                    return;
+                page = historyItem.Page;
             }
-
-            var resolvedData = new Dictionary<string, object>();
-
-            foreach (var resolverType in nr.Resolvers)
+            else
             {
-                if (!(_provider.GetService(resolverType) is INavigationResolver resolver))
-                    continue;
+                page = _provider.GetService(navigationRoute.Page) as Page;
 
-                var resolved = await resolver.Resolve(snapshot);
-                resolvedData.TryAdd(resolver.Key, resolved);
+                var parameters = param?
+                    .GetType()
+                    .GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+                    .ToDictionary(prop => prop.Name, prop => prop.GetValue(param));
+
+                var snapshot = new NavigationSnapshot(parameters, route);
+                foreach (var gurdType in navigationRoute.Guards)
+                {
+                    if (!(_provider.GetService(gurdType) is INavigationGuard guard))
+                        continue;
+
+                    if (!await guard.CanActivate(snapshot))
+                        return;
+                }
+
+                var resolvedDatas = new Dictionary<string, object>();
+                foreach (var resolverType in navigationRoute.Resolvers)
+                {
+                    if (!(_provider.GetService(resolverType) is INavigationResolver resolver))
+                        continue;
+
+                    var resolvedData = await resolver.Resolve(snapshot);
+                    resolvedDatas.TryAdd(resolver.Key, resolvedData);
+                }
+
+                if (page.DataContext is IQueryableNavigation qn)
+                    await qn.OnQueried(parameters);
+
+                if (page.DataContext is IResolvableNavigation rn)
+                    if (!rn.OnResolved(resolvedDatas))
+                        return;
+
+                if (page is IQueryableNavigation pqn)
+                    await pqn.OnQueried(parameters);
+
+                if (page is IResolvableNavigation prn)
+                    if (!prn.OnResolved(resolvedDatas))
+                        return;
+
             }
-
-            if (page.DataContext is IQueryableNavigation qn)
-                await qn.OnQueried(dicParam);
-
-            if (page.DataContext is IResolvableNavigation rn)
-                if (!rn.OnResolved(resolvedData))
-                    return;
-
-            if (page is IQueryableNavigation pqn)
-                await pqn.OnQueried(dicParam);
-
-            if (page is IResolvableNavigation prn)
-                if (!prn.OnResolved(resolvedData))
-                    return;
             
             _history.Add(route, page);
-
             _outlet.Content = page;
         }
 

@@ -6,20 +6,30 @@ namespace Libs.Prism.Navigation.Options
 {
     public class NavigationHistory
     {
-        private readonly Stack<NavigationHistoryItem> _previousItems;
-        private readonly Stack<NavigationHistoryItem> _nextItems;
+        private readonly List<NavigationHistoryItem> _previousItems;
+        private readonly List<NavigationHistoryItem> _nextItems;
+
+
+        public NavigationHistoryItem this[string route]
+        {
+            get => _previousItems
+                .Union(_nextItems)
+                .FirstOrDefault(rt => rt.Route == route);
+        }
 
         public NavigationHistoryItem CurrentItem { private set; get; }
 
 
         internal NavigationHistory() 
         {
-            _previousItems = new Stack<NavigationHistoryItem>();
-            _nextItems = new Stack<NavigationHistoryItem>();
+            _previousItems = new List<NavigationHistoryItem>();
+            _nextItems = new List<NavigationHistoryItem>();
         }
 
         internal void Add(string route, Page page)
         {
+            _previousItems.RemoveAll(rt => rt.Route == route);
+
             if (CurrentItem != null)
             {
                 _previousItems.Push(CurrentItem);
@@ -27,8 +37,7 @@ namespace Libs.Prism.Navigation.Options
                 if (_nextItems.Count > 0)
                     _nextItems.Clear();
             }
-                
-
+            
             CurrentItem = new NavigationHistoryItem(page, route);
         }
 
@@ -66,5 +75,26 @@ namespace Libs.Prism.Navigation.Options
         {
             CurrentItem = null;
         }
+    }
+
+    static class ListExtentions
+    {
+        public static T Pop<T>(this IList<T> list)
+        {
+            if (list.Count <= 0)
+                return default;
+
+            var item = list[0];
+
+            list.RemoveAt(0);
+
+            return item;
+        }
+
+        public static T Peek<T>(this IList<T> list) => list.Count > 0 ? list[0] : default;
+
+        public static void Push<T>(this IList<T> list, T item) => list.Insert(0, item);
+
+
     }
 }

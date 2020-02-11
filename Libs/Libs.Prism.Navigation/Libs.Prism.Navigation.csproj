@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <Version>0.1.3</Version>
+    <Version>0.1.4</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/UillianLopes/PrismHelperDotNetCoreWPF</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -13,6 +13,10 @@
 This library tries to help developers
 to implement navigation through named routes in WPF using the dependency injection of .netcore, it also offers the resources available in lib Libs.Prism.</Description>
     <Authors>Uillian Lopes</Authors>
+    <PackageReleaseNotes>Added navigation behaviors to navigation libs
+Add's navigation behaviors usage to example app
+Fix issue on NavigationService Next() and Previous() items
+Add's option to pop on navigation service</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
