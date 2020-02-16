@@ -53,4 +53,27 @@ The configuration parameter of type **IConfiguration** is the result obtained fr
 
 * **CreateWindow(IServiceProvider provider)**:
 
-This method is has a single parameter that is nothing less than the IServiceProvider. This parameter will be able to resolve all the classes que foram registradas no método ConfigureServices.
+This method has an IServiceProvider object as a parameter and returns a window type object, preferably a Window resolved with IServiceProvider so that the dependency injection works properly.
+
+You can use this methods to call splash screens and other things on your app startup.
+#### 4 - Time to set up navigation
+
+* **First add the required delarations on ConfigureServices method**
+```csharp
+protected override void ConfigureServices(IServiceCollection collection, IConfiguration configuration)
+{
+    collection.AddView<MainWindow, MainWindowViewModel>();
+
+    collection.AddNavigation(bd => bd
+        .AddRoute(rb => rb.Page<HomePage, HomeViewModel>(NavigationRoutes.HOME_PAGE))
+        .AddRoute(rb => rb.Page<Register, RegisterViewModel>(NavigationRoutes.TASK_REGISTER))
+        .AddRoute(rb => rb.Page<Detail, DetailViewModel>(NavigationRoutes.TASK_DETAIL)
+            .AddResolver<TaskDetailResolver>())
+        .AddRoute(rb => rb.Page<List, ListViewModel>(NavigationRoutes.TASK_LIST)
+            .AddResolver<TaskListResolver>()));
+}
+```
+In this line you can see how you add Windows and other Views to you **DI** outside the navigation.
+```csharp
+collection.AddView<MainWindow, MainWindowViewModel>();
+```
